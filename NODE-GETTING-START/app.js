@@ -1,9 +1,38 @@
 const http = require('http');
+const fs = require('fs');
 
 const server = http.createServer((req, res) => {
-    console.log('req url', req.url);
-    console.log('req method', req.method);
-    console.log('req headers', req.headers);
+
+    const url = req.url;
+    const method = req.method;
+
+    if (url === '/') {
+        res.write('<html>');
+        res.write('<header><title>My first node page</title></header>');
+        res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form></body>');
+        res.write('</html>');
+        return res.end();
+    }
+
+    if (url === '/message' && method === 'POST') {
+        const body = [];
+
+        req.on('data', (chunk) => {
+            console.log('chunk', chunk);
+            body.push(chunk);
+        });
+
+        req.on('end', () => {
+            const parseBody = Buffer.concat(body).toString();
+            const message = parseBody.split('=')[1];
+            console.log('parse body', parseBody);
+            fs.writeFileSync('Txt Files/message.txt', message.replace('+\g', ' '));
+        });
+
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        return res.end();
+    }
 
     res.setHeader('Content-Type', 'text/html');
     res.write('<html><header><title>My first node page</title></header></html>');
