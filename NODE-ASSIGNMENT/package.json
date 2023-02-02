@@ -1,0 +1,13 @@
+{
+  "name": "node-assignment",
+  "version": "1.0.0",
+  "description": "Node start assignment",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "start-server": "node app.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
